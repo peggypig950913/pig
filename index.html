@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI 燃脂闖關遊戲</title>
+    <script>
+        async function updateStatus() {
+            const res = await fetch("/status");
+            const data = await res.json();
+            document.getElementById("player_hp").innerText = data.player_hp;
+            document.getElementById("boss_hp").innerText = data.boss_hp;
+            document.getElementById("calories").innerText = data.calories;
+            document.getElementById("score").innerText = data.score;
+        }
+        setInterval(updateStatus, 1000); // 每秒更新一次
+    </script>
+</head>
+<body>
+    <h1>AI 燃脂闖關遊戲</h1>
+    <p>玩家血量: <span id="player_hp"></span></p>
+    <p>Boss 血量: <span id="boss_hp"></span></p>
+    <p>卡路里: <span id="calories"></span></p>
+    <p>分數: <span id="score"></span></p>
+</body>
+</html>
