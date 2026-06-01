@@ -1,24 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>AI 燃脂闖關遊戲</title>
-    <script>
-        async function updateStatus() {
-            const res = await fetch("/status");
-            const data = await res.json();
-            document.getElementById("player_hp").innerText = data.player_hp;
-            document.getElementById("boss_hp").innerText = data.boss_hp;
-            document.getElementById("calories").innerText = data.calories;
-            document.getElementById("score").innerText = data.score;
+h2 id="game_result"></h2>
+<p id="final_calories"></p>
+<p id="food_equiv"></p>
+<button id="restart_btn" style="display:none;" onclick="restartGame()">重新開始</button>
+
+<script>
+    async function updateStatus() {
+        const res = await fetch('/status');
+        const data = await res.json();
+
+        document.getElementById('player_hp_text').innerText = data.player_hp;
+        document.getElementById('boss_hp_text').innerText = data.boss_hp;
+        document.getElementById('calories').innerText = data.calories;
+        document.getElementById('score').innerText = data.score;
+        document.getElementById('seconds').innerText = data.seconds;
+
+        let playerHpPercent = (data.player_hp / 100) * 100;
+        document.getElementById('player_hp_bar').style.width = playerHpPercent + "%";
+
+        let bossHpPercent = (data.boss_hp / 200) * 100;
+        document.getElementById('boss_hp_bar').style.width = bossHpPercent + "%";
+
+        if (data.game_over) {
+            document.getElementById('game_result').innerText = data.result;
+            document.getElementById('final_calories').innerText = "總消耗卡路里: " + data.calories;
+            document.getElementById('food_equiv').innerText = data.food_equiv;
+            document.getElementById('restart_btn').style.display = "block";
         }
-        setInterval(updateStatus, 1000); // 每秒更新一次
-    </script>
-</head>
-<body>
-    <h1>AI 燃脂闖關遊戲</h1>
-    <p>玩家血量: <span id="player_hp"></span></p>
-    <p>Boss 血量: <span id="boss_hp"></span></p>
-    <p>卡路里: <span id="calories"></span></p>
-    <p>分數: <span id="score"></span></p>
-</body>
-</html>
+    }
+
+    function restartGame() {
+        fetch('/restart').then(res => res.text()).then(msg => {
+            document.getElementById('game_result').innerText = "";
+            document.getElementById('final_calories').innerText = "";
+            document
