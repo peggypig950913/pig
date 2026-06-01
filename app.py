@@ -1,4 +1,4 @@
-rom flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify
 import cv2
 import mediapipe as mp
 import numpy as np
