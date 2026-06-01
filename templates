@@ -1,0 +1,7 @@
+pig/
+  app.py
+  game.py
+  requirements.txt
+  Procfile
+  templates/
+    index.html
