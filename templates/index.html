@@ -1,28 +1,22 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <title>AI 遊戲畫面顯示</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script>
-        async function updateStatus() {
-            const res = await fetch('/status');
-            const data = await res.json();
-            document.getElementById('player_hp').innerText = data.player_hp;
-            document.getElementById('boss_hp').innerText = data.boss_hp;
-            document.getElementById('calories').innerText = data.calories;
-            document.getElementById('score').innerText = data.score;
-            document.getElementById('coin').innerText = data.coin;
-        }
-        setInterval(updateStatus, 1000);
-    </script>
-</head>
 <body>
-    <h1>🔥 AI FatBurn Game 🔥</h1>
-    <p>玩家血量: <span id="player_hp"></span></p>
-    <p>Boss血量: <span id="boss_hp"></span></p>
-    <p>消耗卡路里: <span id="calories"></span></p>
-    <p>分數: <span id="score"></span></p>
-    <p>金幣: <span id="coin"></span></p>
-</body>
-</html>
+  <h1>🔥 AI FatBurn Game 🔥</h1>
+  <video id="camera" autoplay playsinline></video>
+
+  <p>玩家血量: <span id="player_hp"></span></p>
+  <p>Boss血量: <span id="boss_hp"></span></p>
+  <p>消耗卡路里: <span id="calories"></span></p>
+  <p>分數: <span id="score"></span></p>
+  <h2 id="game_result"></h2>
+  <p id="final_calories"></p>
+  <p id="food_equiv"></p>
+  <button id="restart_btn" style="display:none;" onclick="restartGame()">重新開始</button>
+
+<script>
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    document.getElementById('camera').srcObject = stream;
+    const video = document.getElementById('camera');
+    setInterval(() => {
+      captureAndSend(video);
+    }, 1000); // 每秒送一次影像到後端
+  });
